@@ -526,7 +526,7 @@ You can safely push this plain text to a shared git repository and the secret pa
 
 <font style="color:red;">bootstrap.yml</font>
 
-~~~
+~~~yaml
 spring:
   application:
     name: "platform"
@@ -545,7 +545,7 @@ If you expect that the config server may occasionally be unavailable when your a
 
 <font style="color:red;">pom.xml</font>
 
-~~~
+~~~pom
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-aop</artifactId>
@@ -560,7 +560,7 @@ If you expect that the config server may occasionally be unavailable when your a
 
 <font style="color:red;">bootstrap.xml</font>
 
-~~~
+~~~yaml
 spring:
   cloud:
     config:
@@ -585,7 +585,7 @@ All of them can be overridden by setting spring.cloud.config.* (where * is "name
 ####Security
 If you use HTTP Basic security on the server then clients just need to know the password (and username if it isn’t the default). You can do that via the config server URI, or via separate username and password properties, e.g.
 
-~~~
+~~~yaml
 spring:
   cloud:
     config:
@@ -594,7 +594,7 @@ spring:
 
 OR
 
-~~~
+~~~yaml
 spring:
   cloud:
     config:
@@ -607,7 +607,7 @@ The spring.cloud.config.password and spring.cloud.config.username values overrid
 
 If you deploy your apps on Cloud Foundry then the best way to provide the password is through service credentials, e.g. in the URI, since then it doesn’t even need to be in a config file. An example which works locally and for a user-provided service on Cloud Foundry named "configserver":
 
-~~~
+~~~yaml
 spring:
   cloud:
     config:
@@ -665,7 +665,7 @@ public class Application {
 
 (i.e. utterly normal Spring Boot app). In this example we use @EnableEurekaClient explicitly, but with only Eureka available you could also use @EnableDiscoveryClient. Configuration is required to locate the Eureka server. Example:
 
-~~~
+~~~yaml
 eureka:
   client:
     serviceUrl:
@@ -690,7 +690,7 @@ The status page and health indicators for a Eureka instance default to "/info" a
 
 <font color="red">application.yml</font>
 
-~~~java
+~~~yaml
 eureka:
   instance:
     statusPageUrlPath: ${management.context-path}/info
@@ -707,7 +707,7 @@ Because of the way Eureka works internally, it will still publish a non-secure U
 
 <font color="red">application.yml</font>
 
-~~~
+~~~yaml
 eureka:
   instance:
     statusPageUrl: https://${eureka.hostname}/info
@@ -724,7 +724,7 @@ By default, Eureka uses the client heartbeat to determine if a client is up. Unl
 
 <font color="red">application.yml</font>
 
-~~~
+~~~yaml
 eureka:
   client:
     healthcheck:
@@ -741,7 +741,7 @@ Cloudfoundry has a global router so that all instances of the same app have the 
 
 <font color="red">application.yml</font>
 
-~~~
+~~~yaml
 eureka:
   instance:
     hostname: ${vcap.application.uris[0]}
@@ -753,7 +753,7 @@ Depending on the way the security rules are set up in your Cloudfoundry instance
 #####Using Eureka on AWS
 If the application is planned to be deployed to an AWS cloud, then the Eureka instance will have to be configured to be Amazon aware and this can be done by customizing the EurekaInstanceConfigBean the following way:
 
-~~~
+~~~java
 @Bean
 @Profile("!default")
 public EurekaInstanceConfigBean eurekaInstanceConfig() {
@@ -771,7 +771,7 @@ Using Spring Cloud you can override this by providing a unique identifier in eur
 
 <font color="red">application.yml</font>
 
-~~~
+~~~yaml
 eureka:
   instance:
     instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
@@ -857,7 +857,7 @@ The combination of the two caches (client and server) and the heartbeats make a 
 
 <font color="red">application.yml</font>
 
-~~~
+~~~yaml
 server:
   port: 8761
 
@@ -876,7 +876,7 @@ Eureka can be made even more resilient and available by running multiple instanc
 
 <font color="red">application.yml</font>
 
-~~~
+~~~yaml
 ---
 spring:
   profiles: peer1
@@ -1026,7 +1026,7 @@ public class PlatformApplication {
 Looking at an individual instances Hystrix data is not very useful in terms of the overall health of the system. **Turbine** is an application that aggregates all of the relevant /hystrix.stream endpoints into a combined /turbine.stream for use in the Hystrix Dashboard. Individual instances are located via Eureka. Running Turbine is as simple as annotating your main class with the @EnableTurbine annotation (e.g. using spring-cloud-starter-turbine to set up the classpath). All of the documented configuration properties from the Turbine 1 wiki apply. The only difference is that the turbine.instanceUrlSuffix does not need the port prepended as this is handled automatically unless turbine.instanceInsertPort=false
 看一个单独的实例数据在检测系统的整体健康方面并没有多大的作用。Turbine程序收集所有有关的/hystrix.stream终端，合并成一个能 Hystrix Dashboard使用的turbine.stream。通过Eureka来定位一个实例。使用方法：
 
-~~~
+~~~xml
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-cloud-starter-turbine</artifactId>
